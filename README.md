@@ -1,4 +1,4 @@
-***Simple script to download music from YouTube useing pyTube***
+***Simple script to download music from YouTube using pyTube***
 
 Commands:
 ```
