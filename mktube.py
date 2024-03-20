@@ -33,8 +33,8 @@ def download_music_from_links(links, destination):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-l', '--link', help='Youtube link')
-    parser.add_argument('-o', '--out', help='Download Location')
+    parser.add_argument('-l', '--link', help='YouTube link')
+    parser.add_argument('-o', '--out', help='Download location')
     parser.add_argument('-m', '--music', action='store_true', help='Read links from music.txt')
     args = parser.parse_args()
 
@@ -44,12 +44,15 @@ def main():
         if args.out:
             links = read_music_links(args.out)
         else:
-            desktop_path = Path.home() / 'Desktop'
-            destination = desktop_path / 'mktube'
+            # Get the path to the user's desktop directory
+            desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+            # Specify the location on the desktop, regardless of the operating system
+            destination = os.path.join(desktop_path, 'mktube')
             # Check if the folder exists, otherwise create it
             if not os.path.exists(destination):
                 os.makedirs(destination)
                 print(f"Folder '{destination}' has been created.")
+            # Read the links from the music.txt file
             links = read_music_links(destination)
             if links is None:
                 # Create an empty music.txt file in the mktube folder on the desktop
@@ -62,9 +65,13 @@ def main():
         print("No link to download!")
         return
 
-    destination = Path(args.out).expanduser().resolve() if args.out else (Path.home() / 'Desktop' / 'mktube')
-    if not destination.exists():
-        destination.mkdir(parents=True, exist_ok=True)
+    # Check if the "-o" or "--out" argument was provided
+    destination = Path(args.out).expanduser().resolve() if args.out else destination
+
+    # Check if the download location exists and create it if it doesn't
+    if not os.path.exists(destination):
+        os.makedirs(destination)
+        print(f"Folder '{destination}' has been created.")
 
     download_music_from_links(links, destination)
 
