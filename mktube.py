@@ -44,18 +44,12 @@ def main():
         if args.out:
             links = read_music_links(args.out)
         else:
-            # Get the path to the user's desktop directory
-            desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
-            # Specify the location on the desktop, regardless of the operating system
-            destination = os.path.join(desktop_path, 'mktube')
-            # Check if the folder exists, otherwise create it
-            if not os.path.exists(destination):
-                os.makedirs(destination)
-                print(f"Folder '{destination}' has been created.")
+            # Specify the location as the directory of the current script
+            destination = os.path.dirname(__file__)
             # Read the links from the music.txt file
             links = read_music_links(destination)
             if links is None:
-                # Create an empty music.txt file in the mktube folder on the desktop
+                # Create an empty music.txt file in the script's directory
                 music_file_path = os.path.join(destination, 'music.txt')
                 with open(music_file_path, 'w') as file:
                     pass
