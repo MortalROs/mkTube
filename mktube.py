@@ -21,11 +21,9 @@ def download_music_from_links(links, destination):
     for link in links:
         try:
             yt = pytube.YouTube(link)
-            video = yt.streams.filter(only_audio=True).first()
-            out_file = video.download(output_path=destination)
-            base, ext = os.path.splitext(out_file)
-            new_file = base + '.mp3'
-            os.rename(out_file, new_file)
+            # Specify audio codec as mp3
+            audio = yt.streams.filter(only_audio=True, file_extension='mp3').first()
+            out_file = audio.download(output_path=destination)
             print(f"{yt.title} has been successfully downloaded to {destination}")
         except Exception as e:
             print(f"An error occurred while downloading {link}: {e}")
